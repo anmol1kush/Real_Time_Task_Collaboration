@@ -1,1 +1,27 @@
-Backend/node_modules
+# Dependencies
+node_modules/
+Backend/node_modules/
+frontend/node_modules/
+
+# Environment files
+.env
+Backend/.env
+frontend/.env
+
+# Build folders
+dist/
+build/
+
+# Vite cache
+.vite/
+frontend/.vite/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VSCode
+.history
