@@ -46,4 +46,22 @@ export function registerSocketHandlers(io, socket) {
 
     io.to(projectId).emit("project:message", payload);
   });
+
+  /* -------- LIVE DOCUMENT (EDITOR.JS) -------- */
+  socket.on("document:fetch", (data) => {
+    const { projectId, documentId } = data;
+    // For now we just echo a start state or rely on broadcast. 
+    // Usually, you would query Prisma `Document` model here and return.
+  });
+
+  socket.on("document:update", (data) => {
+    const { projectId, documentId, data: editorData } = data;
+    socket.to(projectId).emit("document:updated", editorData);
+  });
+
+  /* -------- LIVE WHITEBOARD (EXCALIDRAW) -------- */
+  socket.on("whiteboard:update", (data) => {
+    const { projectId, elements } = data;
+    socket.to(projectId).emit("whiteboard:updated", elements);
+  });
 }

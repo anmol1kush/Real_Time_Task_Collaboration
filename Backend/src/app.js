@@ -12,6 +12,10 @@ app.use(express.json({ limit: "5mb" }));
 
 /* -------- Routes -------- */
 app.use("/api/auth", authRoutes);
+import codespaceRoutes from "./routes/codespace.routes.js";
+app.use("/api/codespace", codespaceRoutes);
+import feedbackRoutes from "./routes/feedback.routes.js";
+app.use("/api/feedback", feedbackRoutes);
 // app.use("/api/projects", projectRoutes);
 
 app.get("/", (_, res) => {

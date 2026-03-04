@@ -1,110 +1,85 @@
 import React, { useState } from "react";
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Avatar,
-  Button,
-  Tooltip,
-} from "@nextui-org/react";
 import { Link, useNavigate } from "react-router-dom";
 import { RTCTLogo } from "../Logos/Logos";
-import { BarChartBig } from "lucide-react";
 import { useAuth } from "../../auth/authContext";
 
 export default function NavbarComponent() {
   const { user, logout } = useAuth();
-const isAuthenticated = !!user;// ✅ JWT-based auth
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <Navbar className="h-20">
+    <nav className="w-full h-16 bg-black border-b border-zinc-900 flex items-center justify-between px-6 lg:px-10 font-mono sticky top-0 z-50">
       {/* Brand */}
-      <NavbarBrand>
-        <Link to="/" className="flex items-center gap-2">
-          <RTCTLogo />
-          <span className="font-bold text-2xl hidden sm:block">RTCT</span>
-        </Link>
-      </NavbarBrand>
+      <Link to="/" className="flex items-center gap-2 text-white">
+        <RTCTLogo />
+        <span className="font-bold text-lg hidden sm:block tracking-widest">RTCT</span>
+      </Link>
 
-      {/* Desktop Links */}
-      <NavbarContent className="hidden md:flex gap-6">
-        <Link to="/dashboard" className="text-xl font-medium">
+      {/* Center links */}
+      <div className="hidden md:flex items-center gap-8">
+        <Link to="/dashboard" className="text-sm text-gray-300 hover:text-white transition-colors">
           Dashboard
         </Link>
-        <Link to="/chat" className="text-xl font-medium">
+        <Link to="/chat" className="text-sm text-gray-300 hover:text-white transition-colors">
           Community
         </Link>
-      </NavbarContent>
+      </div>
 
-      {/* Mobile Menu */}
-      <Dropdown>
-        <DropdownTrigger>
-          <Button isIconOnly className="md:hidden">
-            <BarChartBig />
-          </Button>
-        </DropdownTrigger>
-        <DropdownMenu>
-          <DropdownItem onClick={() => navigate("/dashboard")}>
-            Dashboard
-          </DropdownItem>
-          <DropdownItem onClick={() => navigate("/chat")}>
-            Community
-          </DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-
-      {/* Right Side */}
-      <NavbarContent justify="end">
+      {/* Right side */}
+      <div className="hidden md:flex items-center gap-4">
         {user ? (
-          // ✅ AUTHENTICATED
-          <Dropdown placement="bottom-end">
-            <DropdownTrigger>
-              <Avatar
-                isBordered
-                name={user.email?.[0]?.toUpperCase()}
-                className="cursor-pointer bg-indigo-600 text-white"
-              />
-            </DropdownTrigger>
-
-            <DropdownMenu>
-              <DropdownItem>
-                <Tooltip content={user.email}>
-                  <div>
-                    <p className="text-sm text-gray-500">Signed in as</p>
-                    <p className="font-medium truncate">{user.email}</p>
-                  </div>
-                </Tooltip>
-              </DropdownItem>
-
-              <DropdownItem onClick={() => navigate("/settings")}>
-                Settings
-              </DropdownItem>
-
-              <DropdownItem color="danger" onClick={logout}>
-                Logout
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        ) : (
-          // ❌ NOT AUTHENTICATED
           <>
-            <NavbarItem>
-              <Link to="/login">Login</Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Button onClick={() => navigate("/signup")}>
-                Sign Up
-              </Button>
-            </NavbarItem>
+            <span className="text-xs text-zinc-500 truncate max-w-[140px]">{user.email}</span>
+            <button
+              onClick={logout}
+              className="text-sm text-red-400 hover:text-red-300 transition-colors"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="text-sm text-gray-300 hover:text-white transition-colors">
+              Login
+            </Link>
+            <button
+              onClick={() => navigate("/signup")}
+              className="text-sm px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full transition-colors"
+            >
+              Sign Up
+            </button>
           </>
         )}
-      </NavbarContent>
-    </Navbar>
+      </div>
+
+      {/* Mobile menu toggle */}
+      <button
+        className="md:hidden text-gray-300 hover:text-white"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+
+      {/* Mobile dropdown */}
+      {menuOpen && (
+        <div className="absolute top-16 left-0 right-0 bg-black border-b border-zinc-800 flex flex-col gap-4 p-6 md:hidden z-50">
+          <Link to="/dashboard" className="text-sm text-gray-300" onClick={() => setMenuOpen(false)}>Dashboard</Link>
+          <Link to="/chat" className="text-sm text-gray-300" onClick={() => setMenuOpen(false)}>Community</Link>
+          {user ? (
+            <button onClick={() => { logout(); setMenuOpen(false); }} className="text-sm text-red-400 text-left">Logout</button>
+          ) : (
+            <>
+              <Link to="/login" className="text-sm text-gray-300" onClick={() => setMenuOpen(false)}>Login</Link>
+              <Link to="/signup" className="text-sm text-white bg-indigo-600 px-4 py-1.5 rounded-full w-fit" onClick={() => setMenuOpen(false)}>Sign Up</Link>
+            </>
+          )}
+        </div>
+      )}
+    </nav>
   );
 }

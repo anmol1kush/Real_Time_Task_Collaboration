@@ -1,33 +1,107 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import axios from "../utils/axios";
-import { Label } from "./ui/Label";
-import { Input } from "./ui/Input";
+import { Mail, Lock, User, Loader2, ArrowRight } from "lucide-react";
 
 export default function SignupForm() {
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const signup = async () => {
-    await axios.post("/auth/register", { email, password });
-    alert("Account created. Login now.");
+  const submit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    try {
+      await axios.post("/auth/register", { name, email, password });
+      navigate("/login");
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to create account");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-black rounded-xl text-white">
-      <h2 className="text-2xl font-bold mb-6">Signup</h2>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="w-full max-w-sm mx-auto p-8 border border-zinc-800 bg-black relative z-10"
+    >
+      <div className="mb-10">
+        <h2 className="text-xl font-bold text-white mb-2 tracking-widest uppercase">Register</h2>
+        <p className="text-zinc-600 text-xs tracking-wider">CREATE NEW CREDENTIALS</p>
+      </div>
 
-      <Label>Email</Label>
-      <Input onChange={(e) => setEmail(e.target.value)} />
+      {error && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 p-3 border border-red-900 bg-red-950/30 text-red-500 text-xs">
+          {error}
+        </motion.div>
+      )}
 
-      <Label className="mt-4">Password</Label>
-      <Input type="password" onChange={(e) => setPassword(e.target.value)} />
+      <form onSubmit={submit} className="space-y-6">
+        <div className="space-y-2">
+          <label className="text-xs text-zinc-500 tracking-wider">USERNAME</label>
+          <div className="relative">
+            <input
+              type="text"
+              required
+              placeholder="sysadmin"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full bg-transparent border-b border-zinc-800 py-2 text-sm text-white focus:outline-none focus:border-[#00ff9d] transition-colors placeholder:text-zinc-800"
+            />
+          </div>
+        </div>
 
-      <button
-        onClick={signup}
-        className="w-full mt-6 bg-green-600 h-10 rounded"
-      >
-        Sign Up
-      </button>
-    </div>
+        <div className="space-y-2">
+          <label className="text-xs text-zinc-500 tracking-wider">EMAIL</label>
+          <div className="relative">
+            <input
+              type="email"
+              required
+              placeholder="user@system.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full bg-transparent border-b border-zinc-800 py-2 text-sm text-white focus:outline-none focus:border-[#00ff9d] transition-colors placeholder:text-zinc-800"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-xs text-zinc-500 tracking-wider">PASSWORD</label>
+          <div className="relative">
+            <input
+              type="password"
+              required
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-transparent border-b border-zinc-800 py-2 text-sm text-white focus:outline-none focus:border-[#00ff9d] transition-colors placeholder:text-zinc-800"
+            />
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full py-3 mt-4 border border-[#00ff9d] text-[#00ff9d] text-sm hover:bg-[#00ff9d]/10 transition-colors flex items-center justify-center gap-2 tracking-widest rounded-full uppercase"
+        >
+          {loading ? <Loader2 className="animate-spin" size={16} /> : "Initialize"}
+        </button>
+      </form>
+
+      <p className="mt-8 text-xs text-zinc-600 tracking-wider">
+        ACTIVE SESSION?{' '}
+        <Link to="/login" className="text-zinc-400 hover:text-[#00ff9d] transition-colors border-b border-zinc-800 hover:border-[#00ff9d]">
+          LOGIN HERE
+        </Link>
+      </p>
+    </motion.div>
   );
 }

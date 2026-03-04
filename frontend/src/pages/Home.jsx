@@ -10,16 +10,13 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="box-border">
+      <div className="bg-black box-border">
         <Hero />
-        <br />
-        <br />
+        <div className="my-16" />
         <FeatureCard />
-        <br />
-        <br />
+        <div className="my-16" />
         <AccordionComponent />
-        <br />
-        <br />
+        <div className="my-8" />
         <FeedBackSection />
         <Footer />
       </div>
