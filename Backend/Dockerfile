@@ -1,13 +1,13 @@
-FROM node:22-alpine
+FROM node:22-bookworm
 
 WORKDIR /app
 
 # Install git (required for cloning repos into codespaces)
-RUN apk add --no-cache git
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
 # Copy package files and install dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm config set registry https://registry.npmjs.org/ && npm install --no-audit --no-fund
 
 # Copy source code and Prisma schema
 COPY . .

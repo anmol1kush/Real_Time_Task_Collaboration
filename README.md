@@ -68,6 +68,83 @@
 - Feedback submitted and stored via the backend API
 
 ---
+---
+
+# 📸 Application Screenshots
+
+## 🏠 Landing Page
+
+<p align="center">
+  <img src="README-assets/landing-page.png" width="100%">
+</p>
+
+---
+
+## 📊 Dashboard
+
+<p align="center">
+  <img src="README-assets/dashboard.png" width="100%">
+</p>
+
+---
+
+## ➕ Create New Project
+
+<p align="center">
+  <img src="README-assets/create-project.png" width="70%">
+</p>
+
+---
+
+## 📋 Real-Time Kanban Board
+
+Manage tasks collaboratively with instant synchronization.
+
+<p align="center">
+  <img src="README-assets/kanban-board.png" width="100%">
+</p>
+
+---
+
+## 💬 Project Chat
+
+Persistent real-time messaging using Socket.IO.
+
+<p align="center">
+  <img src="README-assets/chat.png" width="100%">
+</p>
+
+---
+
+## 📝 Collaborative Document Editor
+
+Editor.js powered rich-text collaborative editor.
+
+<p align="center">
+  <img src="README-assets/document-editor.png" width="100%">
+</p>
+
+---
+
+## ✨ Rich Editor Blocks
+
+Supports code blocks, tables, images, quotes, checklists and much more.
+
+<p align="center">
+  <img src="README-assets/document-features.png" width="100%">
+</p>
+
+---
+
+## 🖥️ Browser Codespace
+
+VS Code running inside Docker containers directly in the browser.
+
+<p align="center">
+  <img src="README-assets/codespace.png" width="100%">
+</p>
+
+---
 
 ## 🛠️ Tech Stack
 
